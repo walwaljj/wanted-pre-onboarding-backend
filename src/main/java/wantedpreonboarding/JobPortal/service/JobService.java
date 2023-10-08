@@ -111,7 +111,11 @@ public class JobService {
         validateCompanyInfo(job,company);
 
         job.jobUpdate(dto);
-        return JobDetailResponseDto.of(jobRepository.save(job));
+
+        JobDetailResponseDto jobDetailResponseDto = JobDetailResponseDto.of(jobRepository.save(job));
+        jobDetailResponseDto.setOtherJobInfo(null);
+
+        return jobDetailResponseDto;
     }
 
 
