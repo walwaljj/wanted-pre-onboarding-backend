@@ -13,8 +13,10 @@ import wantedpreonboarding.JobPortal.exception.ErrorCode;
 import wantedpreonboarding.JobPortal.repository.CompanyRepository;
 import wantedpreonboarding.JobPortal.repository.JobRepository;
 
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -133,4 +135,27 @@ public class JobService {
         return sb.toString();
     }
 
+    /**
+     * 채용 정보 검색
+     */
+    public Set<JobResponseDto> search(String searchWord) {
+
+        // 결과 중복 시 제외 시키기 위해 set 선언.
+        Set<JobResponseDto> jobResponseDtoSet = new HashSet<>();
+
+        Set<JobResponseDto> positionResult = jobRepository.findAllByPosition(searchWord).stream()
+                .map(JobResponseDto::of)
+                .collect(Collectors.toSet());
+
+        jobResponseDtoSet.addAll(positionResult);
+
+        jobResponseDtoSet.addAll(jobRepository.findAllByCompanyNameContains(searchWord).stream()
+                .map(JobResponseDto::of)
+                .collect(Collectors.toSet()));
+
+        // 검색 결과가 없는 경우
+        if(jobResponseDtoSet.isEmpty()) throw new CustomException(ErrorCode.SEARCH_NOT_FOUND);
+
+        return jobResponseDtoSet;
+    }
 }

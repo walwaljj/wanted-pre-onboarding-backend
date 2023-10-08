@@ -68,6 +68,23 @@ public class JobController {
     }
 
     /**
+     * 채용 정보 검색
+     */
+    @GetMapping("/search")
+    public ResponseEntity<ResResult> searchJob(@RequestParam String searchWord) {
+
+        ResponseCode responseCode = ResponseCode.JOB_POSTING_SEARCH;
+
+        return ResponseEntity.ok(
+                ResResult.builder()
+                        .responseCode(responseCode)
+                        .code(responseCode.getCode())
+                        .message(responseCode.getMessage())
+                        .data(jobService.search(searchWord))
+                        .build());
+    }
+
+    /**
      * 채용 정보 수정
      */
     @PutMapping("/{jobId}")
