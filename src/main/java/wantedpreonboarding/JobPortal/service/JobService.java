@@ -31,11 +31,9 @@ public class JobService {
      */
     public JobResponseDto create(Job job) {
 
-        Company company = getCompany(job);
+        Company company = getCompany(job.getCompanyId());
 
-        if(!company.getCompanyName().equals(job.getCompanyName()) || !company.getId().equals(job.getCompanyId())){
-            throw new CustomException(ErrorCode.INVALID_COMPANY_INFO);
-        }
+        validateCompanyInfo(job, company);
 
         company.getJobList().add(job);
 
@@ -45,9 +43,8 @@ public class JobService {
     /**
      * company 정보 가져오기
      */
-    public Company getCompany(Job job) {
+    public Company getCompany(Integer companyId) {
 
-        Integer companyId = job.getCompanyId();
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new CustomException(ErrorCode.COMPANY_NOT_FOUND));
 
         return company;
@@ -59,7 +56,7 @@ public class JobService {
     public JobDetailResponseDto detail(Integer jobId) {
 
         Job job = findJobById(jobId);
-        List<Job> jobList = getCompany(job).getJobList();
+        List<Job> jobList = getCompany(jobId).getJobList();
 
         JobDetailResponseDto jobDetailResponseDto = JobDetailResponseDto.of(job);
 
@@ -96,7 +93,7 @@ public class JobService {
 
         Job job = findJobById(jobId);
 
-        Company company = getCompany(job);
+        Company company = getCompany(jobId);
         company.getJobList().remove(job);
 
         jobRepository.delete(job);
@@ -107,9 +104,13 @@ public class JobService {
      */
     public JobDetailResponseDto update(Integer jobId, JobRequestDto dto) {
 
-        Job job = jobRepository.findById(jobId).get();
-        job.jobUpdate(dto);
+        Job job = findJobById(jobId);
+        Company company = getCompany(dto.getCompanyId());
 
+        // 입력 정보 확인
+        validateCompanyInfo(job,company);
+
+        job.jobUpdate(dto);
         return JobDetailResponseDto.of(jobRepository.save(job));
     }
 
@@ -157,5 +158,15 @@ public class JobService {
         if(jobResponseDtoSet.isEmpty()) throw new CustomException(ErrorCode.SEARCH_NOT_FOUND);
 
         return jobResponseDtoSet;
+    }
+
+    /**
+     * 입력된 기업 정보 검사
+     */
+    private boolean validateCompanyInfo(Job job, Company company) {
+        if(!company.getCompanyName().equals(job.getCompanyName()) || !company.getId().equals(job.getCompanyId())){
+            throw new CustomException(ErrorCode.INVALID_COMPANY_INFO);
+        }
+        return true;
     }
 }
