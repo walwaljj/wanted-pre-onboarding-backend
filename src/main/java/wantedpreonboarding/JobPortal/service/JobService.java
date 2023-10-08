@@ -51,8 +51,18 @@ public class JobService {
     public JobDetailResponseDto detail(Integer jobId) {
 
         Job job = findJobById(jobId);
+        List<Job> jobList = getCompany(job).getJobList();
 
         JobDetailResponseDto jobDetailResponseDto = JobDetailResponseDto.of(job);
+
+        // 해당 공고를 제외하고 보여주기 위해 size > 1
+        if (jobList.size() > 1) {
+            String showJobList = showJobList(jobId, jobList);
+            jobDetailResponseDto.setOtherJobInfo(showJobList);
+        } else {
+            jobDetailResponseDto.setOtherJobInfo(null); // size가 1보다 작으면 otherJobInfo를 null로 설정
+        }
+
 
         return jobDetailResponseDto;
     }
@@ -97,5 +107,24 @@ public class JobService {
     }
 
 
+    /**
+     * 기타 채용 정보 반환
+     */
+    public String showJobList(Integer jobId, List<Job> jobList) {
 
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("이 회사의 공고 중인 다른 포지션 [ ");
+
+        for (Job job : jobList) {
+            Integer getJobId = job.getId();
+            if (getJobId.equals(jobId)) continue;
+            String position = job.getPosition();
+            sb.append(position + " ");
+        }
+
+        sb.append("]");
+
+        return sb.toString();
+    }
 }
