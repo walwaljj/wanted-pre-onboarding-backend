@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     // JOB
     JOB_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 공고를 찾을 수 없습니다."),
+    INVALID_COMPANY_INFO(HttpStatus.BAD_REQUEST, "입력된 회사 정보가 잘못되었습니다."),
 
     // USER
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),

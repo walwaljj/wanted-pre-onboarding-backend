@@ -15,6 +15,7 @@ import wantedpreonboarding.JobPortal.repository.JobRepository;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +30,11 @@ public class JobService {
     public JobResponseDto create(Job job) {
 
         Company company = getCompany(job);
+
+        if(!company.getCompanyName().equals(job.getCompanyName()) || !company.getId().equals(job.getCompanyId())){
+            throw new CustomException(ErrorCode.INVALID_COMPANY_INFO);
+        }
+
         company.getJobList().add(job);
 
         return JobResponseDto.of(jobRepository.save(job));
@@ -62,7 +68,6 @@ public class JobService {
         } else {
             jobDetailResponseDto.setOtherJobInfo(null); // size가 1보다 작으면 otherJobInfo를 null로 설정
         }
-
 
         return jobDetailResponseDto;
     }
@@ -127,4 +132,5 @@ public class JobService {
 
         return sb.toString();
     }
+
 }
