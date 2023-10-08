@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 public class JobRequestDto {
 
     @Column(name = "company_id")
-    private Integer companyId; // 회사 id
+    private Integer companyId; // 회사 id, 기업 정보 확인을 위함.
 
     private String position; // 포지션
-
-    private String companyName;
 
     private Integer compensation; // 채용 보상금
 
