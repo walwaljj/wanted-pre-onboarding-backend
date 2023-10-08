@@ -1,8 +1,8 @@
 insert into company
 (id, company_name)
-values(1, 'test1'),
-      (2, 'test2'),
-      (3, 'test3');
+values(1, '카카오'),
+      (2, '네이버'),
+      (3, 'test');
 
 insert into Users
 (id, username)
