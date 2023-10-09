@@ -23,5 +23,5 @@ public class Company {
     private String companyName;
 
     @OneToMany
-    private List<Job> jobList  = new ArrayList<>(); // 해당 기업의 채용 공고 list
+    private List<Job> jobList; // 해당 기업의 채용 공고 list
 }

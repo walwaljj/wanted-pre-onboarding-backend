@@ -14,10 +14,5 @@ spring:
     init:
       mode: always
 
-### H2 Console 설정 (test 프로파일에서만 활성화)
-#h2:
-#  console:
-#    enabled: true
-#    path: /h2-console
 
 
