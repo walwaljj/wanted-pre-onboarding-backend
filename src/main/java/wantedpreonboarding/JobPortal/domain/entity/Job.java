@@ -18,7 +18,7 @@ import java.util.List;
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id; // 채용 공고 id
 
     @Column(name = "company_id")
