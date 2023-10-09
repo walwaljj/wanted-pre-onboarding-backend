@@ -25,8 +25,9 @@ dependencies {
 
 	// JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.projectlombok:lombok:1.18.28'
 
-	// LOMBOK
+    // LOMBOK
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -35,6 +36,10 @@ dependencies {
 	//SQLite
 	implementation 'org.xerial:sqlite-jdbc:3.41.2.2'
 	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
+
+	//H2
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'com.h2database:h2'
 
 	// Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
