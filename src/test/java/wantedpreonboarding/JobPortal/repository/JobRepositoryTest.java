@@ -17,15 +17,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 @ActiveProfiles("test")
 class JobRepositoryTest extends SetData {
 
     @Autowired
     JobRepository jobRepository;
 
+    @Autowired
+    CompanyRepository companyRepository;
+
     @DisplayName("공고 저장 테스트")
     @Test
+    @Transactional
     void 공고_저장() {
 
         // given
@@ -38,16 +41,16 @@ class JobRepositoryTest extends SetData {
         // then
         assertThat(jobRepository.findAll().size()).isEqualTo(4);
         assertThat(jobRepository.findById(jobSequence).get().getId()).isEqualTo(saveJob.getId());
-
-
     }
 
     @DisplayName("포지션 검색 테스트")
     @Test
+    @Transactional
     void 포지션_검색() {
         // given
-        Company company = new Company(getCompanySequence(), "네이버", new ArrayList<>());
-        companyMap.put(company.getId(), company);
+        Integer companySequence = getCompanySequence();
+        Company company = new Company(companySequence, "네이버", new ArrayList<>());
+        companyRepository.save(company);
 
         Integer jobSequence = getJobSequence();
         Job job = new Job(jobSequence, 2, "네이버", "BE", 100000, "BE 포지션", "Java", "KOR", "PUS", new ArrayList<>());
@@ -62,12 +65,14 @@ class JobRepositoryTest extends SetData {
         assertThat(findDEV.size()).isEqualTo(0); // 등록되지 않은 포지션 검색
     }
 
-    @DisplayName("회사 이름 검색 테스트")
+    @DisplayName("회사명 검색 테스트")
     @Test
-    void findAllByCompanyNameContains() {
+    @Transactional
+    void 회사명_검색() {
         // given
-        Company company = new Company(getCompanySequence(), "네이버", new ArrayList<>());
-        companyMap.put(company.getId(), company);
+        Integer companySequence = getCompanySequence();
+        Company company = new Company(companySequence, "네이버", new ArrayList<>());
+        companyRepository.save(company);
 
         Integer jobSequence = getJobSequence();
         Job job = new Job(jobSequence, 2, "네이버", "BE", 100000, "BE 포지션", "Java", "KOR", "PUS", new ArrayList<>());
